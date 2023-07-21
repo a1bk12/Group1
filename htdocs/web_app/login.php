@@ -5,22 +5,22 @@
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form 
       
-      $myusername = mysqli_real_escape_string($db,$_POST['username']);
+      $email = mysqli_real_escape_string($db,$_POST['EmailID']);
       $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
       
-      $sql = "SELECT id FROM admin WHERE username = '$myusername' and passcode = '$mypassword'";
+      $sql = "SELECT USERID FROM credential WHERE EMAIL = '$email' and PASSWORD = '$mypassword'";
       $result = mysqli_query($db,$sql);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $active = $row['active'];
+      $row = mysqli_fetch_array($result,MYSQLI_NUM);
+      //$active = $row['active'];
       
       $count = mysqli_num_rows($result);
       
       // If result matched $myusername and $mypassword, table row must be 1 row
 		
       if($count == 1) {
-         session_register("myusername");
-         $_SESSION['login_user'] = $myusername;
          
+         $_SESSION['login_user'] = $row[0];
+		 
          header("location: welcome.php");
       }else {
          $error = "Your Login Name or Password is invalid";
@@ -58,8 +58,8 @@
             <div style = "margin:30px">
                
                <form action = "" method = "post">
-                  <label>UserID  :</label><input type = "text" name = "userid" class = "box"/><br /><br />
-                  <label>Password  :</label><input type = "password" name = "password" class = "box" /><br/><br />
+                  <label>EmailID :</label><input type = "text" name = "EmailID" class = "box"/><br /><br />
+                  <label>Password :</label><input type = "password" name = "password" class = "box" /><br/><br />
                   <input type = "submit" value = " Submit "/><br />
 				  <a href="signup.php">Create Account</a>
                </form>

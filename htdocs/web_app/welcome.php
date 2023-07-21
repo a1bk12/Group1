@@ -1,3 +1,6 @@
+<?php
+	include("config.php");
+	session_start(); ?>
 <!DOCTYPE html>
 <html>
 
@@ -28,11 +31,10 @@
 
 <body>
     <?php
-	include("config.php");
-	session_start();
-    if (isset($_COOKIE['sql_uid'])) {
-        $sql_uid = $_COOKIE['sql_uid'];
 
+    if (isset($_SESSION['login_user'])) {
+        $sql_uid = $_SESSION['login_user'];
+		//$sql_uid1=$sql_uid[0];
         // Assuming you have already established the database connection ($db)
         // Fetch user data from the 'credential' table
         $query = "SELECT * FROM credential WHERE USERID = '$sql_uid'";
@@ -43,6 +45,7 @@
             $name = $row['NAME'];
             $email = $row['EMAIL'];
             $phone = $row['PHONE'];
+			$sex = $row['SEX'];
 
             // Display user information in a table
             echo "<table>
@@ -51,12 +54,14 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone No</th>
+						<th>Sex</th>
                     </tr>
                     <tr>
 						<td>$sql_uid</td>
                         <td>$name</td>
                         <td>$email</td>
                         <td>$phone</td>
+						<td>$sex</td>
                     </tr>
                 </table>";
         } else {

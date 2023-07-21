@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                <form action="" method="post">
                   <label>Name:</label><input type="text" name="name" class="box" required /><br /><br />
                   <label>Email:</label><input type="email" name="email" class="box" required /><br /><br />
-                  <label>Phone No:</label><input type="text" name="phone" class="box" required /><br /><br />
+                  <label>Phone No:</label><input type="text" maxlength="10" name="phone" class="box" required /><br /><br />
                   <label>Sex:</label>
                   <input type="radio" name="sex" value="Male" required> Male
                   <input type="radio" name="sex" value="Female" required> Female
