@@ -138,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </head>
 
-<body>
+<body background="Email_Signature.jpg">
 
     <div class="container">
         <div class="header"><b>Create Account</b></div>

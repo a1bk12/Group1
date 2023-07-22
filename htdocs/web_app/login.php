@@ -103,8 +103,9 @@
     </style>
 </head>
 
-<body>
+<body background="Email_Signature.jpg">
     <div class="container">
+	
         <div class="login-box">
             <h2 style="color: #00008B;">Login</h2>
             <form action="" method="post">

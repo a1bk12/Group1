@@ -71,7 +71,7 @@
     </style>
 </head>
 
-<body>
+<body background="Email_Signature.jpg">
     <div class="container">
         <h1>Welcome!</h1>
         <h3>User Information:</h3>
