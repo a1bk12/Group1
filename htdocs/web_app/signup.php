@@ -10,9 +10,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sex = mysqli_real_escape_string($db, $_POST['sex']);
     $password = mysqli_real_escape_string($db, $_POST['password']);
 
+	$mailquery = " SELECT * FROM credential WHERE email='$email' LIMIT 1";
+	$mailchk = mysqli_query($db,$mailquery);
     // Insert user data into the database
+	if($mailchk != false){
+	$msg="<span class='err'>E-mail already exist.</span>";
+	return $msg;
+	}else{
     $sql = "INSERT INTO credential (NAME, EMAIL, PHONE, SEX, PASSWORD) VALUES ('$name', '$email', '$phone', '$sex', '$password')";
     $result = mysqli_query($db, $sql);
+
+	if($result){
+	$msg="<span class='sus'> Registration  Successful.</span>";
+	return $msg;
+	}else{$msg="<span class='err'> Registration failed!</span>";
+	return $msg;
+		}
+	}
 
     $sql_uid_q = "SELECT MAX(USERID) AS max_user_id FROM credential";
     $sql_uid_result = mysqli_query($db, $sql_uid_q);
@@ -35,80 +49,127 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
-<html lang="en">
+<html>
 
 <head>
     <title>Signup Page</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+    <style type="text/css">
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 500px;
+            border: solid 1px #4CAF50; /* Green border color */
+            background-color: #fff;
+            margin: 50px auto;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .header {
+            background-color: #00008B; /* Green header background */
+            color: #FFFFFF;
+            padding: 10px;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .form-container {
+            margin: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .box {
+            border: #666666 solid 1px;
+            padding: 8px;
+            width: 100%;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .radio-container {
+            margin-bottom: 20px;
+        }
+
+        .radio-label {
+            margin-right: 20px;
+            color: #555;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+
+        .go-back {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #4CAF50; /* Green link color */
+            margin-top: 20px;
+        }
+
+        .go-back:hover {
+            text-decoration: underline;
+        }
+    </style>
+
 </head>
 
-<body>
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="post">
-                    <span class="login100-form-title">
-                        Sign Up
-                    </span>
-                    <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your name">
-                        <input class="input100" type="text" name="name" placeholder="Name" required>
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your email">
-                        <input class="input100" type="email" name="email" placeholder="Email" required>
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your phone number">
-                        <input class="input100" type="text" name="phone" placeholder="Phone No" required>
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div class="wrap-input100 validate-input m-b-16">
-                        <label for="sex">Sex:</label>
-                        <input type="radio" name="sex" value="Male" required> Male
-                        <input type="radio" name="sex" value="Female" required> Female
-                        <input type="radio" name="sex" value="Others" required> Others
-                    </div>
-                    <div class="wrap-input100 validate-input" data-validate="Please enter a password">
-                        <input class="input100" type="password" name="password" placeholder="Password" required>
-                        <span class="focus-input100"></span>
-                    </div>
-										<div class="text-right p-t-13 p-b-23">
-						<span class="txt1">
-						</span>
-						<a href="#" class="txt2">
-						</a>
-					</div>
-                    <div class="container-login100-form-btn">
-                        <button class="login100-form-btn" type="submit">
-                            Sign Up
-                        </button>
-                    </div>
-                    <div class="flex-col-c p-t-170 p-b-40">
-                        <span class="txt1 p-b-9">
-                            Already have an account?
-                        </span>
-                        <a href="login.php">
-                            Sign in now
-                        </a>
-                    </div>
-                </form>
-            </div>
+<body background="Email_Signature.jpg">
+
+    <div class="container">
+        <div class="header"><b>Create Account</b></div>
+
+        <div class="form-container">
+            <form action="" method="post">
+                <label>Name:</label><br>
+                <input type="text" name="name" class="box" required /><br /><br />
+
+                <label>Email:</label><br>
+                <input type="email" name="email" class="box" required /><br /><br />
+
+                <label>Phone No:</label><br>
+                <input type="text" maxlength="10" name="phone" class="box" required /><br /><br />
+
+                <div class="radio-container">
+                    <label class="radio-label">Sex:</label>
+                    <input type="radio" name="sex" value="Male" required> Male
+                    <input type="radio" name="sex" value="Female" required> Female
+                    <input type="radio" name="sex" value="Others" required> Others
+                </div>
+
+                <label>Password:</label><br>
+                <input type="password" name="password" class="box" required /><br /><br />
+
+                <input type="submit" value="Sign Up" class="submit-button" /><br />
+            </form>
         </div>
+        <a href="login.php" class="go-back">Go Back</a>
     </div>
 
 </body>
 
 </html>
-
