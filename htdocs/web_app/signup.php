@@ -10,46 +10,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sex = mysqli_real_escape_string($db, $_POST['sex']);
     $password = mysqli_real_escape_string($db, $_POST['password']);
 
-	$mailquery = " SELECT * FROM credential WHERE email='$email' LIMIT 1";
-	$mailchk = mysqli_query($db,$mailquery);
-    // Insert user data into the database
-	if($mailchk != false){
-	$msg="<span class='err'>E-mail already exist.</span>";
-	return $msg;
-	}else{
-    $sql = "INSERT INTO credential (NAME, EMAIL, PHONE, SEX, PASSWORD) VALUES ('$name', '$email', '$phone', '$sex', '$password')";
-    $result = mysqli_query($db, $sql);
-
-	if($result){
-	$msg="<span class='sus'> Registration  Successful.</span>";
-	return $msg;
-	}else{$msg="<span class='err'> Registration failed!</span>";
-	return $msg;
-		}
-	}
-
-    $sql_uid_q = "SELECT MAX(USERID) AS max_user_id FROM credential";
-    $sql_uid_result = mysqli_query($db, $sql_uid_q);
-    if ($sql_uid_result && mysqli_num_rows($sql_uid_result) > 0) {
-        $row = mysqli_fetch_assoc($sql_uid_result);
-        $max_user_id = $row['max_user_id'];
-        setcookie('sql_uid', $max_user_id, time() + 3600, '/');
-    }
-
-    if (isset($_COOKIE['sql_uid'])) {
-        $sql_uid_from_cookie = $_COOKIE['sql_uid'];
-        echo "Value retrieved from cookie: " . $sql_uid_from_cookie;
-    }
-
-    if ($result) {
-        header("location: welcome.php");
-        exit();
+    // Check if email already exists
+    $mailquery = "SELECT * FROM credential WHERE email='$email' LIMIT 1";
+    $mailchk = mysqli_query($db, $mailquery);
+    if (mysqli_num_rows($mailchk) > 0) {
+        echo "<script>alert('E-mail already exists. Please use a different email.');</script>";
     } else {
-        $error = "Error during registration. Please try again later.";
+        // Insert user data into the database
+        $sql = "INSERT INTO credential (NAME, EMAIL, PHONE, SEX, PASSWORD) VALUES ('$name', '$email', '$phone', '$sex', '$password')";
+        $result = mysqli_query($db, $sql);
+
+        if ($result) {
+            // Retrieve the max user ID and set a session and cookie
+            $sql_uid_q = "SELECT MAX(USERID) AS max_user_id FROM credential";
+            $sql_uid_result = mysqli_query($db, $sql_uid_q);
+            if ($sql_uid_result && mysqli_num_rows($sql_uid_result) > 0) {
+                $row = mysqli_fetch_assoc($sql_uid_result);
+                $max_user_id = $row['max_user_id'];
+                $_SESSION['login_user'] = $max_user_id;
+                setcookie('sql_uid', $max_user_id, time() + 3600, '/');
+            }
+
+            // Redirect to the welcome page
+            header("location: welcome.php");
+            exit();
+        } else {
+            $msg = "<span class='err'>Registration failed!</span>";
+        }
     }
 }
 ?>
-<html>
 
 <head>
     <title>Signup Page</title>
